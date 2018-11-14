@@ -40,7 +40,8 @@ def connect():
 def other():
     print('homepage_support.other')
     sys.stdout.flush()
-    start()
+    import manual
+    manual.create_Treadmill(root,'new')
 
 jk = 0
 age = 0
