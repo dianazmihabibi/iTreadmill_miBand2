@@ -1,17 +1,44 @@
-import numpy as np
-import pandas as pd
-import sys
-from stockstats import StockDataFrame
-import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('TkAgg')
 
-df = pd.DataFrame.from_csv(sys.argv[1], index_col=None)
-print df.head
-df['time'] = pd.to_datetime(df['time'], unit='s')
-df = df.set_index('time')
-print df.describe()
-# plt.subplot('111')
-# df.plot(kind='line')
-# plt.subplot('122')
-# df.plot(kind='histogram')
-df.rolling('120s').mean().plot()
-plt.show()
+from numpy import arange, sin, pi
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.figure import Figure
+
+import sys
+if sys.version_info[0] < 3:
+    import Tkinter as Tk
+else:
+    import tkinter as Tk
+
+
+def destroy(e):
+    sys.exit()
+
+root = Tk.Tk()
+root.wm_title("Embedding in TK")
+
+
+f = Figure(figsize=(5, 4), dpi=100)
+a = f.add_subplot(111)
+##t = arange(0.0, 3.0, 0.01)
+##s = sin(2*pi*t)
+##
+##a.plot(t, s)
+a.plot([1,2,3,4,5,6,7,8],[5,6,1,3,8,9,3,5])
+a.set_title('Tk embedding')
+a.set_xlabel('X axis label')
+a.set_ylabel('Y label')
+
+
+# a tk.DrawingArea
+canvas = FigureCanvasTkAgg(f, master=root)
+canvas.show()
+canvas.get_tk_widget().pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
+
+canvas._tkcanvas.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
+
+button = Tk.Button(master=root, text='Quit', command=sys.exit)
+button.pack(side=Tk.BOTTOM)
+
+Tk.mainloop()

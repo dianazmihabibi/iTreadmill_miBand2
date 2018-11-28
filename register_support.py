@@ -23,16 +23,34 @@ except ImportError:
 
 
 gender = ["Male","Female"]
+ratus = [0,100,200]
 puluh = [0,10,20,30,40,50,60,70,80,90]
 satu = [0,1,2,3,4,5,6,7,8,9]
 sel_gen = 0
-sel_age_pul = 0
-sel_age_sat = 0
+sel_age_rat = 0
+sel_age_pul = 2
+sel_age_sat = 2
 age = 0
-sel_wei_pul = 0
+sel_wei_rat = 0
+sel_wei_pul = 6
 sel_wei_sat = 0
 weight = 0
 
+def age_rat_bot_btn():
+    print('register_support.age_rat_bot_btn')
+    sys.stdout.flush()
+    global sel_age_rat
+    if sel_age_rat > 0:
+        sel_age_rat = sel_age_rat - 1
+        w.age_ratus.configure(text=sel_age_rat)
+        
+def age_rat_up_btn():
+    print('register_support.age_rat_up_btn')
+    sys.stdout.flush()
+    global sel_age_rat
+    if sel_age_rat < 1:
+        sel_age_rat = sel_age_rat + 1
+        w.age_ratus.configure(text=sel_age_rat)    
 
 def age_pul_bot_btn():
     print('register_support.age_pul_bot_btn')
@@ -40,7 +58,7 @@ def age_pul_bot_btn():
     global sel_age_pul
     if sel_age_pul > 0:
         sel_age_pul = sel_age_pul - 1
-        w.age_puluh.configure(text=sel_age_pul)  
+        w.age_puluh.configure(text=sel_age_pul)
 
 def age_pul_up_btn():
     print('register_support.age_pul_up_btn')
@@ -99,15 +117,30 @@ def submit():
     global sel_wei_sat
     global weight
     
-    age = puluh [sel_age_pul] + satu [sel_age_sat]
-    weight = puluh [sel_wei_pul] + satu [sel_wei_sat]
+    age = ratus [sel_age_rat] + puluh [sel_age_pul] + satu [sel_age_sat]
+    weight = ratus [sel_wei_rat] + puluh [sel_wei_pul] + satu [sel_wei_sat]
     
     fp = open('reg.txt', 'w', os.O_NONBLOCK)
     data = "%d,%d,%s" % (age, weight, gender[sel_gen])
     fp.write(data)
     fp.close()
     print (age, weight, gender[sel_gen])
+
+def wei_rat_bot_btn():
+    print('register_support.wei_rat_bot_btn')
+    sys.stdout.flush()
+    global sel_wei_rat
+    if sel_wei_rat > 0:
+        sel_wei_rat = sel_wei_rat - 1
+        w.wei_ratus.configure(text=sel_wei_rat)
     
+def wei_rat_up_btn():
+    print('register_support.wei_rat_up_btn')
+    sys.stdout.flush()
+    global sel_wei_rat
+    if sel_wei_rat < 1:
+        sel_wei_rat = sel_wei_rat + 1
+        w.wei_ratus.configure(text=sel_wei_rat)
 
 def wei_pul_bot_btn():
     print('register_support.wei_pul_bot_btn')

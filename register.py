@@ -98,48 +98,69 @@ class Register:
         self.Labelframe2.configure(labelanchor="n")
         self.Labelframe2.configure(text='''Age''')
         self.Labelframe2.configure(width=470)
+        
+        self.age_rat_up_btn = Button(self.Labelframe2)
+        self.age_rat_up_btn.place(relx=0.043, rely=0.078, height=35, width=132
+                , bordermode='ignore')
+        self.age_rat_up_btn.configure(activebackground="#d9d9d9")
+        self.age_rat_up_btn.configure(command=register_support.age_rat_up_btn)
+        self.age_rat_up_btn.configure(text="▲")
 
         self.age_pul_up_btn = Button(self.Labelframe2)
-        self.age_pul_up_btn.place(relx=0.043, rely=0.078, height=35, width=192
+        self.age_pul_up_btn.place(relx=0.362, rely=0.078, height=35, width=132
                 , bordermode='ignore')
         self.age_pul_up_btn.configure(activebackground="#d9d9d9")
         self.age_pul_up_btn.configure(command=register_support.age_pul_up_btn)
         self.age_pul_up_btn.configure(text="▲")
 
         self.age_sat_up_btn = Button(self.Labelframe2)
-        self.age_sat_up_btn.place(relx=0.532, rely=0.078, height=35, width=192
+        self.age_sat_up_btn.place(relx=0.681, rely=0.078, height=35, width=132
                 , bordermode='ignore')
         self.age_sat_up_btn.configure(activebackground="#d9d9d9")
         self.age_sat_up_btn.configure(command=register_support.age_sat_up_btn)
         self.age_sat_up_btn.configure(text="▲")
 
+        self.age_rat_bot_btn = Button(self.Labelframe2)
+        self.age_rat_bot_btn.place(relx=0.043, rely=0.784, height=35, width=132
+                , bordermode='ignore')
+        self.age_rat_bot_btn.configure(activebackground="#d9d9d9")
+        self.age_rat_bot_btn.configure(command=register_support.age_rat_bot_btn)
+        self.age_rat_bot_btn.configure(text="▼")
+
         self.age_pul_bot_btn = Button(self.Labelframe2)
-        self.age_pul_bot_btn.place(relx=0.043, rely=0.784, height=35, width=192
+        self.age_pul_bot_btn.place(relx=0.362, rely=0.784, height=35, width=132
                 , bordermode='ignore')
         self.age_pul_bot_btn.configure(activebackground="#d9d9d9")
         self.age_pul_bot_btn.configure(command=register_support.age_pul_bot_btn)
         self.age_pul_bot_btn.configure(text="▼")
 
         self.age_sat_bot_btn = Button(self.Labelframe2)
-        self.age_sat_bot_btn.place(relx=0.532, rely=0.784, height=35, width=192
+        self.age_sat_bot_btn.place(relx=0.681, rely=0.784, height=35, width=132
                 , bordermode='ignore')
         self.age_sat_bot_btn.configure(activebackground="#d9d9d9")
         self.age_sat_bot_btn.configure(command=register_support.age_sat_bot_btn)
         self.age_sat_bot_btn.configure(text="▼")
+        
+        self.age_ratus = Label(self.Labelframe2)
+        self.age_ratus.place(relx=0.043, rely=0.260, height=130, width=130
+                , bordermode='ignore')
+        self.age_ratus.configure(activebackground="#f9f9f9")
+        self.age_ratus.configure(background="#ffffff")
+        self.age_ratus.configure(text='''0''',font=("Helvetica", 50))
 
         self.age_puluh = Label(self.Labelframe2)
-        self.age_puluh.place(relx=0.043, rely=0.235, height=130, width=190
+        self.age_puluh.place(relx=0.362, rely=0.260, height=130, width=130
                 , bordermode='ignore')
         self.age_puluh.configure(activebackground="#f9f9f9")
         self.age_puluh.configure(background="#ffffff")
-        self.age_puluh.configure(text='''0''',font=("Helvetica", 50))
+        self.age_puluh.configure(text='''2''',font=("Helvetica", 50))
 
         self.age_satu = Label(self.Labelframe2)
-        self.age_satu.place(relx=0.532, rely=0.235, height=130, width=190
+        self.age_satu.place(relx=0.681, rely=0.260, height=130, width=130
                 , bordermode='ignore')
         self.age_satu.configure(activebackground="#f9f9f9")
         self.age_satu.configure(background="#ffffff")
-        self.age_satu.configure(text='''0''',font=("Helvetica", 50))
+        self.age_satu.configure(text='''2''',font=("Helvetica", 50))
 
         self.Labelframe2_2 = LabelFrame(top)
         self.Labelframe2_2.place(relx=0.515, rely=0.336, relheight=0.476
@@ -148,44 +169,65 @@ class Register:
         self.Labelframe2_2.configure(labelanchor="n")
         self.Labelframe2_2.configure(text='''Weight''')
         self.Labelframe2_2.configure(width=480)
+        
+        self.wei_rat_up_btn = Button(self.Labelframe2_2)
+        self.wei_rat_up_btn.place(relx=0.042, rely=0.078, height=35, width=132
+                , bordermode='ignore')
+        self.wei_rat_up_btn.configure(activebackground="#d9d9d9")
+        self.wei_rat_up_btn.configure(command=register_support.wei_rat_up_btn)
+        self.wei_rat_up_btn.configure(text="▲")
+
+        self.wei_rat_bot_btn = Button(self.Labelframe2_2)
+        self.wei_rat_bot_btn.place(relx=0.042, rely=0.784, height=35, width=132
+                , bordermode='ignore')
+        self.wei_rat_bot_btn.configure(activebackground="#d9d9d9")
+        self.wei_rat_bot_btn.configure(command=register_support.wei_rat_bot_btn)
+        self.wei_rat_bot_btn.configure(text="▼")
 
         self.wei_pul_up_btn = Button(self.Labelframe2_2)
-        self.wei_pul_up_btn.place(relx=0.042, rely=0.078, height=35, width=192
+        self.wei_pul_up_btn.place(relx=0.365, rely=0.078, height=35, width=132
                 , bordermode='ignore')
         self.wei_pul_up_btn.configure(activebackground="#d9d9d9")
         self.wei_pul_up_btn.configure(command=register_support.wei_pul_up_btn)
         self.wei_pul_up_btn.configure(text="▲")
 
         self.wei_pul_bot_btn = Button(self.Labelframe2_2)
-        self.wei_pul_bot_btn.place(relx=0.042, rely=0.784, height=35, width=192
+        self.wei_pul_bot_btn.place(relx=0.365, rely=0.784, height=35, width=132
                 , bordermode='ignore')
         self.wei_pul_bot_btn.configure(activebackground="#d9d9d9")
         self.wei_pul_bot_btn.configure(command=register_support.wei_pul_bot_btn)
         self.wei_pul_bot_btn.configure(text="▼")
 
         self.wei_sat_up_btn = Button(self.Labelframe2_2)
-        self.wei_sat_up_btn.place(relx=0.542, rely=0.078, height=35, width=192
+        self.wei_sat_up_btn.place(relx=0.688, rely=0.078, height=35, width=132
                 , bordermode='ignore')
         self.wei_sat_up_btn.configure(activebackground="#d9d9d9")
         self.wei_sat_up_btn.configure(command=register_support.wei_sat_up_btn)
         self.wei_sat_up_btn.configure(text="▲")
 
         self.wei_sat_bot_btn = Button(self.Labelframe2_2)
-        self.wei_sat_bot_btn.place(relx=0.542, rely=0.784, height=35, width=192
+        self.wei_sat_bot_btn.place(relx=0.688, rely=0.784, height=35, width=132
                 , bordermode='ignore')
         self.wei_sat_bot_btn.configure(activebackground="#d9d9d9")
         self.wei_sat_bot_btn.configure(command=register_support.wei_sat_bot_btn)
         self.wei_sat_bot_btn.configure(text="▼")
+        
+        self.wei_ratus = Label(self.Labelframe2_2)
+        self.wei_ratus.place(relx=0.042, rely=0.260, height=130, width=130
+                , bordermode='ignore')
+        self.wei_ratus.configure(activebackground="#f9f9f9")
+        self.wei_ratus.configure(background="#ffffff")
+        self.wei_ratus.configure(text='''0''',font=("Helvetica", 50))
 
         self.wei_puluh = Label(self.Labelframe2_2)
-        self.wei_puluh.place(relx=0.042, rely=0.235, height=130, width=190
+        self.wei_puluh.place(relx=0.365, rely=0.260, height=130, width=130
                 , bordermode='ignore')
         self.wei_puluh.configure(activebackground="#f9f9f9")
         self.wei_puluh.configure(background="#ffffff")
-        self.wei_puluh.configure(text='''0''',font=("Helvetica", 50))
+        self.wei_puluh.configure(text='''6''',font=("Helvetica", 50))
 
         self.wei_satu = Label(self.Labelframe2_2)
-        self.wei_satu.place(relx=0.542, rely=0.235, height=130, width=190
+        self.wei_satu.place(relx=0.688, rely=0.260, height=130, width=130
                 , bordermode='ignore')
         self.wei_satu.configure(activebackground="#f9f9f9")
         self.wei_satu.configure(background="#ffffff")
