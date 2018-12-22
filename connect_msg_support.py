@@ -5,15 +5,16 @@
 # In conjunction with Tcl version 8.6
 #    Oct 21, 2018 03:22:33 PM WIB  platform: Linux
 
+import os
 import sys
-sys.path.insert(0, 'MiBand2/')
+##sys.path.insert(0, 'MiBand2/')
 
 import time
-from base import MiBand2
-from constants import ALERT_TYPES
+##from base import MiBand2
+##from constants import ALERT_TYPES
 
 #MAC ADDRESS MI BAND 2
-MAC = 'D6:EC:F2:B3:70:BA'
+##MAC = 'D6:EC:F2:B3:70:BA'
 
 try:
     from Tkinter import *
@@ -28,16 +29,19 @@ except ImportError:
     py3 = True
 
 def connect():
-    print('connect_msg_support.connect')
-    sys.stdout.flush()
-    print('initiate mi band 2')
-    sys.stdout.flush()
-    band = MiBand2(MAC, debug=True)
-    band.setSecurityLevel(level="medium")
-    if band.initialize():
-        w.Label1.configure(text='''Mi Band Connected!''')
-        w.but40.configure(text="Ok", command=destroy_window)
-    band.disconnect()
+##    print('connect_msg_support.connect')
+##    sys.stdout.flush()
+##    print('initiate mi band 2')
+##    sys.stdout.flush()
+##    band = MiBand2(MAC, debug=True)
+##    band.setSecurityLevel(level="medium")
+##    if band.initialize():
+##        w.Label1.configure(text='''Mi Band Connected!''')
+##        w.but40.configure(text="Ok", command=destroy_window)
+##    band.disconnect()
+##    os.system("lxterminal --command='python dump.py' ")
+    w.Label1.configure(text='''Mi Band Connected!''')
+    w.but40.configure(text="Ok", command=destroy_window)
 
 def init(top, gui, *args, **kwargs):
     global w, top_level, root

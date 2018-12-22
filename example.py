@@ -3,14 +3,14 @@ import time
 from base import MiBand2
 from constants import ALERT_TYPES
 
-MAC = sys.argv[1]
+##MAC = sys.argv[1]
 
-#Mi Band MAC = 'D6:EC:F2:B3:70:BA'
+MAC = 'D6:EC:F2:B3:70:BA'
 
 band = MiBand2(MAC, debug=True)
 band.setSecurityLevel(level="medium")
 
-if len(sys.argv) > 2:
+if len(sys.argv) > 1:
     if band.initialize():
         print("Init OK")
     band.set_heart_monitor_sleep_support(enabled=False)
@@ -41,13 +41,13 @@ def l(x):
     print (x, band.get_steps())
 
 
-#def b(x):
-#    print ('Raw heart:', x)
+def b(x):
+    print ('Raw heart:', x)
 
 
-#def f(x):
-#    print ('Raw accel heart:', x)
+def f(x):
+    print ('Raw accel heart:', x)
 
-band.start_heart_rate_realtime(heart_measure_callback=l)
-#band.start_raw_data_realtime(heart_measure_callback=l, heart_raw_callback=b, accel_raw_callback=f)
+##band.start_heart_rate_realtime(heart_measure_callback=l)
+band.start_raw_data_realtime(heart_measure_callback=l, heart_raw_callback=b, accel_raw_callback=f)
 band.disconnect()

@@ -15,7 +15,8 @@ import sys
 ##
 ###MAC ADDRESS MI BAND 2
 ##MAC = 'D6:EC:F2:B3:70:BA'
-import time 
+import time
+import datetime
 import coba
 import os
 import RPi.GPIO as GPIO
@@ -35,7 +36,7 @@ except ImportError:
     py3 = True
 
 def recap():
-    print('coba_support.recap')
+##    print('coba_support.recap')
     sys.stdout.flush()
     import recap
     recap.create_Treadmill(root, 'new')
@@ -51,21 +52,23 @@ speed = 1.0
 
 def run_treadmill():
     GPIO.setmode(GPIO.BCM)
-    GPIO.setup(17, GPIO.OUT)
-    GPIO.output(17, GPIO.LOW)
+    GPIO.setup(26, GPIO.OUT)
+    GPIO.output(26, GPIO.HIGH)
 
-    time.sleep(0.2)
+    time.sleep(0.1)
 ##    root.after(250)
 
-    GPIO.output(17, GPIO.HIGH)
+    GPIO.output(26, GPIO.LOW)
     GPIO.cleanup()
     
     w.speed_val.configure(text=speed)
 
+timeString = ''
 def update_timeText():
     if (state):
         global timer
         global root
+        global timeString
         # Every time this function is called, 
         # we will increment 1 centisecond (1/100 of a second)
         timer[2] += 1
@@ -90,10 +93,15 @@ def update_timeText():
 ##pattern = '{0:02d}:{1:02d}:{2:02d}'
 hr = 0
 steps = 0
+##waktu = []
+##bpm = []
+##step = []
+
 def data():
 ##    while True:
     global hr
     global steps
+    
     if(state):
         fp = open('log.txt', 'r',os.O_NONBLOCK).read()
         lines = fp.split('\n')
@@ -113,19 +121,48 @@ def data():
         steps = int(step[1])
         w.hr_val.configure(text=hr)
         w.step_value.configure(text=steps)
-        print (hr,steps)
+##        print (hr,steps)
 ##    time.sleep(2.3)
         root.after(1000,data)
+
+currentDT = datetime.datetime.now()
+file_path = ''
+def save():
+    if(state):
+        global currentDT
+        global timer
+        global hr
+        global steps
+        global speed
+        global jarak
+        global cal
+        global file_path
+        global min
+        global max
+        global speed_mode
+        
+        time_stamp = currentDT.strftime("%d-%m-%Y %H:%M:%S")
+        file_path =  '/home/pi/Downloads/page/logs/log_'+ time_stamp + '.txt'
+    ##    file_path = '/home/pi/Downloads/page/logs/log2.txt'
+        fp = open(file_path, 'a', os.O_NONBLOCK)
+        data = "%s,%s,%s,%s,%s,%s,%s,%s,%s\n" % (timeString, hr, steps, speed, jarak, cal, min, max, speed_mode)
+        fp.write (data)
+    ##    print (data)
+        fp.close
+        root.after(1000,save)
+    
+    
 
 ##start = False
 start_time = 0
 elapsed_time = 0
 cal = 0
+max_kalori = 0
 def start():
-    print('coba_support.start')
+##    print('coba_support.start')
     sys.stdout.flush()
     run_treadmill()
-##    time.sleep(2.5)
+    time.sleep(2.5)
 ##    global start
 ##    start = True
     global state
@@ -148,9 +185,13 @@ def start():
 ##    w.step_value.configure(text=step[1])
 ##    thread.start_new_thread(data())
 ##    data()
+    data()
+    save()
     auto_speed()
     distance()
     calories()
+    
+##    kalori()
 ##    p2 = Process(target = data)
 ##    p2.start()
 ##    p1.join()
@@ -168,10 +209,10 @@ def distance():
 ##        elapsed_time = time.gmtime(elapsed_time)
 ##        elapsed_time = round(elapsed_time,3)
         
-        print (elapsed_time)
+##        print (elapsed_time)
         jarak = (speed/3600) * elapsed_time
         jarak = round(jarak,2)
-        print (jarak)
+##        print (jarak)
         w.cov_val.configure(text=jarak)
         root.after(1000,distance)
 
@@ -183,24 +224,37 @@ def calories():
         global age
         global elapsed_time
         global cal
+        global kalor
 ##        hr = float(hr)
 ##        weight = float(weight)
 ##        age = float(age)
 ##        elapsed_time = float(elapsed_time)
-        
+##        calories = []
         if elapsed_time > 0.0 :
             if jk == 0:
-##                cal = (-55.0969 + (0.6309 * hr)+(0.1988 * weight)+(0.2017*age))/(4.184*60.0*(elapsed_time/3600.0))
                 cal = ((-55.0969 + (0.6309 * hr)+(0.1988 * weight)+(0.2017*age))/4.184)*(60.0*elapsed_time/3600)
             else :
                 cal = ((-20.4022 + (0.4472 * hr)+(0.1263 * weight)+(0.074*age))/4.184)*(60.0*elapsed_time/3600)        
         cal = int(cal)
+##        print("calorinya segini loch!", cal)
         w.cal_val.configure(text=cal)
-        print("calorinya segini loch!", cal)
+        
+##        kalori()
         root.after(1000,calories)
+##
+##def kalori():
+##    global cal
+##    global max_kalori
+##    
+##    kalori = []
+##    kalori.append(str(cal))
+##    max_kalori = max(kalori)
+##    print (kalori, max_kalori)
+##    w.cal_val.configure(text=cal)
+##    root.after(1000,kalori)
 
 def finish():
-    print('coba_support.finish')
+##    print('coba_support.finish')
     sys.stdout.flush()
     run_treadmill()
     global state
@@ -209,20 +263,34 @@ def finish():
     data()
     w.start.configure(text="Restart", command=reset)
     
+    path = open('path.txt', 'w', os.O_NONBLOCK)
+    fill = "%s" % (file_path)
+    path.write(fill)
+    path.close()
+
 def reset():
+    global jarak
     global timer
     global speed
+    global cal
+    global hr
+    global steps
+    steps=0
+    hr=0
+    jarak=0
+    cal=0
+    speed = 1.0
     timer = [0, 0, 0]
     w.timer.configure(text='00:00:00')
-    w.hr_val.configure(text='0')
-    w.step_value.configure(text='0')
-    w.speed_val.configure(text='0')
-    speed = 1.0
-    w.cov_val.configure(text='0')
+    w.hr_val.configure(text=hr)
+    w.step_value.configure(text=steps)
+    w.speed_val.configure(text=speed)
+    w.cal_val.configure(text=cal)
+    w.cov_val.configure(text=jarak)
     w.start.configure(text="Start", command=start)
     
 def speed_down():
-    print('coba_support.speed_down')
+##    print('coba_support.speed_down')
     sys.stdout.flush()
     
     global speed
@@ -234,17 +302,17 @@ def speed_down():
             w.speed_val.configure(text=speed)
     
             GPIO.setmode(GPIO.BCM)
-            GPIO.setup(27, GPIO.OUT)
-            GPIO.output(27, GPIO.LOW)
+            GPIO.setup(21, GPIO.OUT)
+            GPIO.output(21, GPIO.HIGH)
 
             time.sleep(0.10)
 ##        root.after(250, speed_down)
-            GPIO.output(27, GPIO.HIGH)
+            GPIO.output(21, GPIO.LOW)
             GPIO.cleanup()
     
 
 def speed_up():
-    print('coba_support.speed_up')
+##    print('coba_support.speed_up')
     sys.stdout.flush()
 ##    global start
 ##    start = True
@@ -255,23 +323,23 @@ def speed_up():
         w.speed_val.configure(text=speed)
     
         GPIO.setmode(GPIO.BCM)
-        GPIO.setup(22, GPIO.OUT)
-        GPIO.output(22, GPIO.LOW)
+        GPIO.setup(19, GPIO.OUT)
+        GPIO.output(19, GPIO.HIGH)
 ##        root.after(250, speed_up)
         time.sleep(0.1)
-        GPIO.output(22, GPIO.HIGH)
+        GPIO.output(19, GPIO.LOW)
         GPIO.cleanup()
 
 
 def auto_speed():
-    data()
+
     if(state): 
         global min
         global max
         global hr       
         print ('THR :',min,max)
 ##    global steps
-        print ("hr adalah :",hr)
+##        print ("hr adalah :",hr)
         if hr > min and hr < max :
             pass
             

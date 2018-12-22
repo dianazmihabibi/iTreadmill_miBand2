@@ -5,6 +5,14 @@
 # In conjunction with Tcl version 8.6
 #    Oct 15, 2018 04:16:00 PM WIB  platform: Linux
 import matplotlib
+import time
+import datetime
+import os
+from firebase import firebase
+firebase = firebase.FirebaseApplication('https://treadmill-b0a11.firebaseio.com/', None)
+
+##from coba import *
+##from coba_support import *
 ##import matplotlib.pyplot as plt
 matplotlib.use('TkAgg')
 
@@ -104,8 +112,68 @@ class Treadmill:
 ##        a.set_xlabel('X axis label')
 ##        a.set_ylabel('Y label')
 
+        # data
+##        global waktu
+        
+##        dir = open('path.txt', 'r', os.O_NONBLOCK).read()
+##        data_dir = open(dir, 'r', os.O_NONBLOCK).read()
+        data_dir = open('/home/pi/Downloads/page/logs/log_22-12-2018 23:32:22.txt', 'r', os.O_NONBLOCK).read()
+        lines = data_dir.split('\n')
+        batas = len(lines)-2
+        
+        waktu = []
+        bpm = []
+        step = []
+        spd = []
+        dist = []
+        kal = []
+        mn = []
+        mx = []
+        spdm = []
 
+        for line in lines:
+##    for line in lines:
+##     (timeString, hr, steps, speed, jarak, cal, min, max, speed_mode)
+            if len(line)>= 1:
+                a, b, c, d, e, f, g, h, i = line.split(',')
+                waktu.append(str(a))
+                bpm.append(str(b))
+                step.append(str(c))
+                spd.append(str(d))
+                dist.append(str(e))
+                kal.append(str(f))
+                mn.append(str(g))
+                mx.append(str(h))
+                spdm.append(str(i))
+
+##        print (bpm, len(lines))
+        numbering = []
+        selector = []
+        max_cal = max(kal)
+        max_bpm = max(bpm)
+        
+##        print (bpm, kal)
+        
+        for min in range (0, len(bpm),5):
+            selector.append(int(bpm[min]))
+            numbering.append(len(selector))
+        
+        average = int(sum(selector) / len(selector))
+##        maxhr = max(selector)
         # a tk.DrawingArea
+        currentDT = datetime.datetime.now()
+        time_stamp = currentDT.strftime("%d-%m-%Y %H:%M:%S")
+        file_path =  '/home/pi/Downloads/page/recap/log_'+ time_stamp + '.txt'
+        fp = open(file_path, 'a', os.O_NONBLOCK)
+        data = "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n" % (waktu[batas], step[batas], spd[batas], dist[batas], max_cal, mn[0], mx[0], spdm[0], max_bpm, average)
+        result = firebase.post('/data',{'mode':spdm[0],'time':waktu[batas],'timestamp':time_stamp, 'step':step[batas], 'speed':spd[batas], 'distance':dist[batas],'calories':max_cal,'THRmin':mn[0],'THRmax':mx[0],'maximum_bpm':max_bpm,'average':average})
+        print (result)
+        fp.write (data)
+##    print (data)
+        fp.close
+    
+
+        
         
         self.Canvas1 = Canvas(self.TNotebook1_t0)
         self.Canvas1.place(relx=0.08, rely=0.118, relheight=0.865, relwidth=0.821)
@@ -115,10 +183,10 @@ class Treadmill:
         self.Canvas1.configure(width=821)
         self.f = Figure(figsize=(8,4), dpi=100)
         self.a = self.f.add_subplot(111)
-        self.a.plot([1,2,3,4,5,6,7,8],[60,65,85,90,92,95,94,90])
+        self.a.plot(numbering,selector)
         self.a.set_title('BPM')
-        self.a.set_xlabel('X axis label')
-        self.a.set_ylabel('Y label')
+        self.a.set_xlabel('time')
+        self.a.set_ylabel('Heart Rate (Bpm)')
         self.Canvas1 = FigureCanvasTkAgg(self.f, self.Canvas1)
         self.Canvas1.draw()
         self.Canvas1.get_tk_widget().pack()
@@ -133,21 +201,21 @@ class Treadmill:
         self.Label2.place(relx=0.21, rely=0.059, height=17, width=34)
         self.Label2.configure(activebackground="#f9f9f9")
         self.Label2.configure(text='''Max :''')
-
-        self.Label3 = Label(self.TNotebook1_t0)
-        self.Label3.place(relx=0.27, rely=0.059, height=17, width=78)
-        self.Label3.configure(activebackground="#f9f9f9")
-        self.Label3.configure(text='''max_value''')
+        
+        self.max_hr = Label(self.TNotebook1_t0)
+        self.max_hr.place(relx=0.27, rely=0.059, height=17, width=78)
+        self.max_hr.configure(activebackground="#f9f9f9")
+        self.max_hr.configure(text=max_bpm)
 
         self.Label4 = Label(self.TNotebook1_t0)
         self.Label4.place(relx=0.4, rely=0.059, height=17, width=58)
         self.Label4.configure(activebackground="#f9f9f9")
         self.Label4.configure(text='''Average :''')
 
-        self.Label3 = Label(self.TNotebook1_t0)
-        self.Label3.place(relx=0.48, rely=0.059, height=17, width=108)
-        self.Label3.configure(activebackground="#f9f9f9")
-        self.Label3.configure(text='''average_value''')
+        self.avg_hr = Label(self.TNotebook1_t0)
+        self.avg_hr.place(relx=0.48, rely=0.059, height=17, width=108)
+        self.avg_hr.configure(activebackground="#f9f9f9")
+        self.avg_hr.configure(text=average)
 
         self.Labelframe1 = LabelFrame(self.TNotebook1_t1)
         self.Labelframe1.place(relx=0.02, rely=0.02, relheight=0.951
@@ -163,11 +231,11 @@ class Treadmill:
         self.Labelframe2.configure(text='''Average Heart Rate''')
         self.Labelframe2.configure(width=150)
 
-        self.Label5 = Label(self.Labelframe2)
-        self.Label5.place(relx=0.133, rely=0.207, height=37, width=114
+        self.avg_heart = Label(self.Labelframe2)
+        self.avg_heart.place(relx=0.133, rely=0.207, height=37, width=114
                 , bordermode='ignore')
-        self.Label5.configure(activebackground="#f9f9f9")
-        self.Label5.configure(text='''Label''')
+        self.avg_heart.configure(activebackground="#f9f9f9")
+        self.avg_heart.configure(text=average)
 
         self.Label5 = Label(self.Labelframe2)
         self.Label5.place(relx=0.133, rely=0.552, height=37, width=114
@@ -182,11 +250,11 @@ class Treadmill:
         self.Labelframe2.configure(text='''Total Steps''')
         self.Labelframe2.configure(width=150)
 
-        self.Label5 = Label(self.Labelframe2)
-        self.Label5.place(relx=0.133, rely=0.207, height=37, width=114
+        self.step_val = Label(self.Labelframe2)
+        self.step_val.place(relx=0.133, rely=0.207, height=37, width=114
                 , bordermode='ignore')
-        self.Label5.configure(activebackground="#f9f9f9")
-        self.Label5.configure(text='''Label''')
+        self.step_val.configure(activebackground="#f9f9f9")
+        self.step_val.configure(text=step[batas])
 
         self.Label5 = Label(self.Labelframe2)
         self.Label5.place(relx=0.133, rely=0.552, height=37, width=114
@@ -200,12 +268,12 @@ class Treadmill:
         self.Labelframe2.configure(relief=GROOVE)
         self.Labelframe2.configure(text='''Burned Calories''')
         self.Labelframe2.configure(width=150)
-
-        self.Label5 = Label(self.Labelframe2)
-        self.Label5.place(relx=0.133, rely=0.207, height=37, width=114
+        
+        self.cal_val = Label(self.Labelframe2)
+        self.cal_val.place(relx=0.133, rely=0.207, height=37, width=114
                 , bordermode='ignore')
-        self.Label5.configure(activebackground="#f9f9f9")
-        self.Label5.configure(text='''Label''')
+        self.cal_val.configure(activebackground="#f9f9f9")
+        self.cal_val.configure(text=max_cal)
 
         self.Label5 = Label(self.Labelframe2)
         self.Label5.place(relx=0.133, rely=0.552, height=37, width=114
@@ -220,11 +288,11 @@ class Treadmill:
         self.Labelframe2.configure(text='''Maximum Heart Rate''')
         self.Labelframe2.configure(width=150)
 
-        self.Label5 = Label(self.Labelframe2)
-        self.Label5.place(relx=0.133, rely=0.207, height=37, width=114
+        self.max_heart_val = Label(self.Labelframe2)
+        self.max_heart_val.place(relx=0.133, rely=0.207, height=37, width=114
                 , bordermode='ignore')
-        self.Label5.configure(activebackground="#f9f9f9")
-        self.Label5.configure(text='''Label''')
+        self.max_heart_val.configure(activebackground="#f9f9f9")
+        self.max_heart_val.configure(text=max_bpm)
 
         self.Label5 = Label(self.Labelframe2)
         self.Label5.place(relx=0.133, rely=0.552, height=37, width=114
@@ -236,14 +304,14 @@ class Treadmill:
         self.Labelframe2.place(relx=0.417, rely=0.557, relheight=0.299
                 , relwidth=0.156, bordermode='ignore')
         self.Labelframe2.configure(relief=GROOVE)
-        self.Labelframe2.configure(text='''Step Frequency''')
+        self.Labelframe2.configure(text='''Treadmill Mode''')
         self.Labelframe2.configure(width=150)
 
-        self.Label5 = Label(self.Labelframe2)
-        self.Label5.place(relx=0.133, rely=0.207, height=37, width=114
+        self.step_per_min_val = Label(self.Labelframe2)
+        self.step_per_min_val.place(relx=0.133, rely=0.207, height=37, width=114
                 , bordermode='ignore')
-        self.Label5.configure(activebackground="#f9f9f9")
-        self.Label5.configure(text='''Label''')
+        self.step_per_min_val.configure(activebackground="#f9f9f9")
+        self.step_per_min_val.configure(text=spdm[0])
 
         self.Label5 = Label(self.Labelframe2)
         self.Label5.place(relx=0.133, rely=0.552, height=37, width=114
@@ -255,14 +323,14 @@ class Treadmill:
         self.Labelframe2.place(relx=0.604, rely=0.557, relheight=0.299
                 , relwidth=0.156, bordermode='ignore')
         self.Labelframe2.configure(relief=GROOVE)
-        self.Labelframe2.configure(text='''Covered''')
+        self.Labelframe2.configure(text='''Distance''')
         self.Labelframe2.configure(width=150)
 
-        self.Label5 = Label(self.Labelframe2)
-        self.Label5.place(relx=0.133, rely=0.207, height=37, width=114
+        self.dist_val = Label(self.Labelframe2)
+        self.dist_val.place(relx=0.133, rely=0.207, height=37, width=114
                 , bordermode='ignore')
-        self.Label5.configure(activebackground="#f9f9f9")
-        self.Label5.configure(text='''Label''')
+        self.dist_val.configure(activebackground="#f9f9f9")
+        self.dist_val.configure(text=dist[batas])
 
         self.Label5 = Label(self.Labelframe2)
         self.Label5.place(relx=0.133, rely=0.552, height=37, width=114
@@ -277,11 +345,11 @@ class Treadmill:
         self.Labelframe2.configure(text='''Speed''')
         self.Labelframe2.configure(width=150)
 
-        self.Label5 = Label(self.Labelframe2)
-        self.Label5.place(relx=0.133, rely=0.207, height=37, width=114
+        self.speed_val = Label(self.Labelframe2)
+        self.speed_val.place(relx=0.133, rely=0.207, height=37, width=114
                 , bordermode='ignore')
-        self.Label5.configure(activebackground="#f9f9f9")
-        self.Label5.configure(text='''Label''')
+        self.speed_val.configure(activebackground="#f9f9f9")
+        self.speed_val.configure(text=spd[batas])
 
         self.Label5 = Label(self.Labelframe2)
         self.Label5.place(relx=0.133, rely=0.552, height=37, width=114
@@ -296,11 +364,11 @@ class Treadmill:
         self.Labelframe2.configure(text='''Time''')
         self.Labelframe2.configure(width=150)
 
-        self.Label5 = Label(self.Labelframe2)
-        self.Label5.place(relx=0.067, rely=0.345, height=37, width=114
+        self.time_val = Label(self.Labelframe2)
+        self.time_val.place(relx=0.067, rely=0.345, height=37, width=114
                 , bordermode='ignore')
-        self.Label5.configure(activebackground="#f9f9f9")
-        self.Label5.configure(text='''Label''')
+        self.time_val.configure(activebackground="#f9f9f9")
+        self.time_val.configure(text=waktu[batas])
 
         self.back = Button(top)
         self.back.place(relx=0.019, rely=0.017, height=35, width=62)

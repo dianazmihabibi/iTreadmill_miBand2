@@ -33,7 +33,7 @@ except ImportError:
 def connect():
     print('homepage_support.connect')
     sys.stdout.flush()
-    
+    os.system("lxterminal --command='python dump.py' ")
     import connect_msg
     connect_msg.create_Connect_Mi_Band_2(root, 'new')
     
@@ -95,8 +95,12 @@ def register():
 ints = [0.65,0.75,0.80,0.85,0.90]
 min = 0
 max = 0
+speed_mode = ''
+mode = ['recovery', 'aerobic', 'extensive endurance', 'intensive endurance', 'anaerobic treshold','max aerobic']
 def recovery():
-    print('mode : recovery')
+    global speed_mode
+    speed_mode = mode[0]
+    print('mode : ', speed_mode)
     sys.stdout.flush()
     global hrmax
     global hrr
@@ -109,7 +113,9 @@ def recovery():
     start()
     
 def aerobic():
-    print('mode : aerobic')
+    global speed_mode
+    speed_mode = mode[1]
+    print('mode : ', speed_mode)
     sys.stdout.flush()
     global hrmax
     global hrr
@@ -122,7 +128,9 @@ def aerobic():
     start()
 
 def exteendu():
-    print('mode : extensive endurance')
+    global speed_mode
+    speed_mode = mode[2]
+    print('mode : ', speed_mode)
     sys.stdout.flush()
     global hrmax
     global hrr
@@ -135,7 +143,9 @@ def exteendu():
     start()
 
 def inteendu():
-    print('mode : intensive endurance')
+    global speed_mode
+    speed_mode = mode[3]
+    print('mode : ', speed_mode)
     sys.stdout.flush()
     global hrmax
     global hrr
@@ -148,7 +158,9 @@ def inteendu():
     start()
 
 def anaetres():
-    print('mode : anaerobic treshold')
+    global speed_mode
+    speed_mode = mode[4]
+    print('mode : ', speed_mode)
     sys.stdout.flush()
     global hrmax
     global hrr
@@ -161,7 +173,9 @@ def anaetres():
     start()
     
 def maxaer():
-    print('mode : max aerobic')
+    global speed_mode
+    speed_mode = mode[5]
+    print('mode : ', speed_mode)
     sys.stdout.flush()
     global hrmax
     global hrr
